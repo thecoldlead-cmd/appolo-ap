@@ -3,28 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lead Search Engine</title>
+    <title>LeadPro | SaaS Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Lead Search Engine</h1>
-        <input type="text" id="searchInput" placeholder="Search by name, company or email...">
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Title</th>
-                    <th>Company</th>
-                    <th>Location</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="results">
-                </tbody>
-        </table>
+
+    <div id="auth-container" class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-logo"><i class="fas fa-rocket"></i> LEADPRO</div>
+            <h2>Start Finding Leads</h2>
+            <p>Sign up to get 50 free credits!</p>
+            <div class="auth-form">
+                <input type="email" id="email" placeholder="Work Email">
+                <input type="password" id="password" placeholder="Password">
+                <button onclick="handleLogin()" class="btn-primary">Login</button>
+                <button onclick="handleSignUp()" class="btn-secondary">Create Account</button>
+            </div>
+        </div>
     </div>
+
+    <div id="dashboard" class="saas-layout" style="display: none;">
+        <aside class="saas-sidebar">
+            <div class="brand"><i class="fas fa-bolt"></i> LEADPRO</div>
+            <nav>
+                <div class="nav-item active"><i class="fas fa-search"></i> Search Leads</div>
+                <div class="nav-item"><i class="fas fa-filter"></i> Filters</div>
+                <div class="nav-item"><i class="fas fa-credit-card"></i> Credits: <strong id="user-credits">50</strong></div>
+            </nav>
+            <button onclick="handleLogout()" class="logout-btn">Logout</button>
+        </aside>
+
+        <main class="saas-main">
+            <header class="main-header">
+                <div class="search-bar-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search by name, company, or title...">
+                </div>
+            </header>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
