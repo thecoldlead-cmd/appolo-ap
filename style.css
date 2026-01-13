@@ -1,61 +1,24 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f6;
-    padding: 20px;
-}
+:root { --primary: #2160fd; --dark: #101828; --border: #eaecf0; }
+body { font-family: 'Inter', sans-serif; margin: 0; background: #f9fafb; }
 
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+.auth-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); }
+.auth-card { background: white; padding: 40px; border-radius: 16px; width: 380px; text-align: center; }
 
-h1 {
-    text-align: center;
-    color: #333;
-}
+.saas-layout { display: flex; height: 100vh; }
+.saas-sidebar { width: 260px; background: white; border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
+.brand { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 40px; }
+.nav-item { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+.nav-item.active { background: #eff4ff; color: var(--primary); }
 
-#searchInput {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box; /* padding সহ width ঠিক রাখবে */
-}
+.saas-main { flex: 1; overflow-y: auto; }
+.main-header { padding: 20px; background: white; border-bottom: 1px solid var(--border); }
+.search-bar-wrapper { position: relative; }
+.search-bar-wrapper i { position: absolute; left: 15px; top: 12px; color: #98a2b3; }
+.search-bar-wrapper input { width: 50%; padding: 10px 45px; border: 1px solid var(--border); border-radius: 8px; }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    text-align: left;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #007bff;
-    color: white;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-.view-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.view-btn:hover {
-    background-color: #218838;
-}
+table { width: 100%; border-collapse: collapse; background: white; }
+th { background: #f9fafb; padding: 15px; text-align: left; font-size: 12px; color: #667085; }
+td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+.btn-primary { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; }
+.view-btn { background: #039855; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+.logout-btn { margin-top: auto; padding: 10px; border: none; background: #fee4e2; color: #d92d20; border-radius: 8px; cursor: pointer; }
