@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apollo AI - Pro Lead Finder</title>
+    <title>Apollo Pro - Lead Generation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -12,10 +12,10 @@
         <nav class="side-nav">
             <div class="logo"><i class="fas fa-rocket"></i> Apollo.Clone</div>
             <ul>
-                <li class="active"><i class="fas fa-search"></i> Search</li>
-                <li><i class="fas fa-bullseye"></i> Leads</li>
-                <li><i class="fas fa-envelope"></i> Sequences</li>
-                <li><i class="fas fa-cog"></i> Settings</li>
+                <li class="nav-item active" onclick="showSection('search')"><i class="fas fa-search"></i> Search Leads</li>
+                <li class="nav-item" onclick="showSection('leads')"><i class="fas fa-database"></i> My Leads</li>
+                <li class="nav-item" onclick="openPayment()"><i class="fas fa-shopping-cart" style="color: #fbbf24;"></i> Buy Credits</li>
+                <li class="nav-item" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</li>
             </ul>
         </nav>
 
@@ -23,38 +23,67 @@
             <header class="header">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="mainSearch" placeholder="Search people, companies, keywords...">
+                    <input type="text" id="mainSearch" placeholder="Search by name, company or free leads...">
                 </div>
                 <div class="user-profile">
-                    <span class="credits">Credits: 1,500</span>
-                    <img src="https://via.placeholder.com/40" alt="Profile">
+                    <div class="credit-display">
+                        <i class="fas fa-coins"></i> Credits: <span id="userCredits">1500</span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="Profile">
                 </div>
             </header>
 
-            <div class="filter-bar">
-                <button class="filter-btn active">Total Results (<span id="count">0</span>)</button>
-                <button class="filter-btn">Verified Emails</button>
-                <button class="filter-btn">With Phone</button>
+            <div id="search-section">
+                <div class="info-banner">
+                    <p><i class="fas fa-info-circle"></i> <strong>Tip:</strong> Search "Free" to see leads that don't cost credits!</p>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadData"></tbody>
+                    </table>
+                    <div id="loader" class="loader">Fetching real-time data...</div>
+                </div>
             </div>
 
-            <div class="table-container">
-                <table id="leadTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Job Title</th>
-                            <th>Company</th>
-                            <th>Email Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leadData">
-                        </tbody>
-                </table>
-                <div id="loader" class="loader">Loading Leads...</div>
+            <div id="other-section" style="display:none; text-align: center; padding: 50px;">
+                <h2 id="section-title">Section Name</h2>
+                <p>Features coming soon...</p>
             </div>
         </main>
     </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePayment()">&times;</span>
+            <h2>Upgrade Your Account</h2>
+            <p>Select a package to add more credits</p>
+            <div class="pricing-cards">
+                <div class="card">
+                    <h3>Basic</h3>
+                    <p>1,000 Credits</p>
+                    <div class="price">$10</div>
+                    <button onclick="alert('Redirecting to Payment Gateway...')">Buy Now</button>
+                </div>
+                <div class="card popular">
+                    <h3>Pro</h3>
+                    <p>5,000 Credits</p>
+                    <div class="price">$40</div>
+                    <button onclick="alert('Redirecting to Payment Gateway...')">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
