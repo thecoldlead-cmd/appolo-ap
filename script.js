@@ -1,70 +1,33 @@
-// আপনার শিট আইডি অলরেডি বসিয়ে দিয়েছি
-const SHEET_ID = '1hsogF0HyhH1rAb9Rg_Gn68dGpNakjxsDGpDI818_wz4'; 
-const SHEET_TITLE = 'Sheet1'; 
-const SHEET_RANGE = 'A2:D100'; 
+:root { --primary: #2563eb; --dark: #0f172a; --border: #e2e8f0; }
+body { font-family: 'Inter', sans-serif; margin: 0; background: #f8fafc; }
+.dashboard { display: flex; height: 100vh; }
+.side-nav { width: 250px; background: var(--dark); color: white; padding: 20px; }
+.logo { font-size: 22px; font-weight: bold; margin-bottom: 30px; color: #60a5fa; }
+.nav-item { padding: 12px; cursor: pointer; border-radius: 8px; color: #94a3b8; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+.nav-item.active, .nav-item:hover { background: #1e293b; color: white; }
 
-const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_TITLE}&range=${SHEET_RANGE}`;
+.main-area { flex: 1; padding: 30px; overflow-y: auto; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.search-box { background: white; border: 1px solid var(--border); padding: 10px; border-radius: 10px; width: 50%; display: flex; }
+.search-box input { border: none; outline: none; width: 100%; margin-left: 10px; }
 
-const leadData = document.getElementById('leadData');
-const mainSearch = document.getElementById('mainSearch');
-const countSpan = document.getElementById('count');
-const loader = document.getElementById('loader');
+.credit-display { background: #eff6ff; color: #1d4ed8; padding: 8px 15px; border-radius: 20px; font-weight: bold; margin-right: 15px; border: 1px solid #bfdbfe; }
+.user-profile img { width: 40px; border-radius: 50%; }
 
-let allLeads = [];
+.info-banner { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+table { width: 100%; background: white; border-collapse: collapse; border-radius: 10px; overflow: hidden; }
+th, td { padding: 15px; border-bottom: 1px solid var(--border); text-align: left; }
 
-async function fetchLeads() {
-    loader.style.display = "block";
-    try {
-        const response = await fetch(URL);
-        const text = await response.text();
-        // Google Sheet JSON ফরম্যাট ক্লিন করা
-        const jsonData = JSON.parse(text.substring(47).slice(0, -2));
-        
-        allLeads = jsonData.table.rows.map(row => ({
-            name: row.c[0] ? row.c[0].v : 'N/A',
-            title: row.c[1] ? row.c[1].v : 'N/A',
-            company: row.c[2] ? row.c[2].v : 'N/A',
-            email: row.c[3] ? row.c[3].v : 'Unverified'
-        }));
+.status { padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; }
+.free-tag { background: #dcfce7; color: #166534; }
+.paid-tag { background: #fee2e2; color: #991b1b; }
+.access-btn { background: var(--primary); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
 
-        renderLeads(allLeads);
-    } catch (error) {
-        console.error("Error:", error);
-        leadData.innerHTML = "<tr><td colspan='5' style='text-align:center; color:red;'>ডেটা লোড করতে সমস্যা হচ্ছে। শিটটি Public করা আছে কিনা চেক করুন।</td></tr>";
-    } finally {
-        loader.style.display = "none";
-    }
-}
-
-function renderLeads(leads) {
-    leadData.innerHTML = "";
-    leads.forEach(lead => {
-        const row = `
-            <tr>
-                <td><strong>${lead.name}</strong></td>
-                <td>${lead.title}</td>
-                <td>${lead.company}</td>
-                <td><span class="status ${lead.email.toLowerCase() === 'verified' ? 'verified' : ''}">${lead.email}</span></td>
-                <td><button class="access-btn" onclick="accessEmail('${lead.name}')">Access Email</button></td>
-            </tr>
-        `;
-        leadData.innerHTML += row;
-    });
-    countSpan.innerText = leads.length;
-}
-
-mainSearch.addEventListener('input', (e) => {
-    const value = e.target.value.toLowerCase();
-    const filtered = allLeads.filter(item => 
-        item.name.toString().toLowerCase().includes(value) || 
-        item.company.toString().toLowerCase().includes(value)
-    );
-    renderLeads(filtered);
-});
-
-function accessEmail(name) {
-    alert("Fetching email for: " + name);
-}
-
-// লোড কল
-fetchLeads();
+/* Modal CSS */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+.modal-content { background: white; margin: 10% auto; padding: 30px; width: 50%; border-radius: 15px; text-align: center; }
+.pricing-cards { display: flex; gap: 20px; justify-content: center; margin-top: 20px; }
+.card { border: 1px solid var(--border); padding: 20px; border-radius: 10px; width: 150px; }
+.popular { border: 2px solid var(--primary); transform: scale(1.1); }
+.price { font-size: 24px; font-weight: bold; margin: 10px 0; }
+.close { float: right; cursor: pointer; font-size: 24px; }
