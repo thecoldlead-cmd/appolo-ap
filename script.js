@@ -1,86 +1,59 @@
-// ১. আপনার নতুন শিট আইডি এবং ট্যাব নাম
-const SHEET_ID = '16dK4p0q13BjYcze-oZCY2UtGp1RFwSmyJGQ0IW3h9y8'; // নতুন শিট আইডি
-const SHEET_NAME = 'Sheet1'; // আপনার নতুন শিটের ট্যাব নাম
-const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+// আপনার সুপাবেস কানেকশন ডিটেইলস
+const SUPABASE_URL = 'https://zkoudzxdhwgjzxcrzbvi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inprb3VkenhkaHdnanp4Y3J6YnZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgzMjE0OTUsImV4cCI6MjA4Mzg5NzQ5NX0.TwHDRrryXMW9QZUacLC98PzvX9PqShHE7ylUzQZCiB0';
 
-let allLeads = [];
-let currentCredits = 1500;
+const resultsBody = document.getElementById('results');
+const searchInput = document.getElementById('searchInput');
 
-// ২. ডেটা ফেচ করার ফাংশন
-async function fetchLeads() {
-    const loader = document.getElementById('loader');
-    if (loader) loader.style.display = "block";
+// ডাটাবেস থেকে লিড আনার ফাংশন
+async function fetchLeads(query = '') {
+    resultsBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>';
     
-    try {
-        const response = await fetch(URL);
-        const rawText = await response.text();
-        const jsonData = JSON.parse(rawText.substring(47).slice(0, -2));
-        
-        // আপনার শিটের কলাম ম্যাপিং (A=0, B=1, C=2, D=3...)
-        allLeads = jsonData.table.rows.map(row => {
-            const r = row.c;
-            return {
-                name: (r[0] ? r[0].v : '') + ' ' + (r[1] ? r[1].v : ''), // First + Last Name
-                title: r[2] ? r[2].v : 'N/A', // Title
-                company: r[3] ? r[3].v : 'N/A', // Company Name
-                status: r[15] ? r[15].v : 'Verified' // Status কলাম (P=index 15)
-            };
-        });
+    // Supabase API URL
+    let url = `${SUPABASE_URL}/rest/v1/leads?select=*`;
+    
+    // যদি কেউ সার্চ করে তবে ফিল্টার করবে (নাম বা কোম্পানি দিয়ে)
+    if (query) {
+        url += `&or=(first_name.ilike.*${query}*,company_name.ilike.*${query}*)`;
+    }
 
-        renderLeads(allLeads);
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`
+            }
+        });
+        const data = await response.json();
+        
+        if (data.length === 0) {
+            resultsBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No data found.</td></tr>';
+        } else {
+            renderTable(data);
+        }
     } catch (error) {
-        console.error("ডেটা লোড করতে সমস্যা হয়েছে:", error);
-    } finally {
-        if (loader) loader.style.display = "none";
+        console.error('Error:', error);
+        resultsBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:red;">Error connecting to database!</td></tr>';
     }
 }
 
-// ৩. টেবিল রেন্ডার ফাংশন (স্মুথ লোডিংয়ের জন্য)
-function renderLeads(leads) {
-    const container = document.getElementById('leadData');
-    if (!container) return;
-    
-    // একসাথে অনেক ডেটা রেন্ডার করলে ব্রাউজার হ্যাং হয়, তাই লিমিট করা হলো
-    const displayLeads = leads.slice(0, 100); 
-    
-    let html = "";
-    displayLeads.forEach(lead => {
-        html += `
-            <tr class="fade-in">
-                <td><strong>${lead.name}</strong></td>
-                <td>${lead.title}</td>
-                <td>${lead.company}</td>
-                <td><span class="status verified">${lead.status}</span></td>
-                <td><button class="access-btn" onclick="handleUnlock('${lead.name}')">Access Email</button></td>
-            </tr>`;
-    });
-    
-    container.innerHTML = html;
-    
-    // মোট লিড সংখ্যা আপডেট
-    const countLabel = document.getElementById('count');
-    if (countLabel) countLabel.innerText = leads.length;
+// টেবিলে ডাটা দেখানোর ফাংশন
+function renderTable(leads) {
+    resultsBody.innerHTML = leads.map(lead => `
+        <tr>
+            <td>${lead.first_name} ${lead.last_name || ''}</td>
+            <td>${lead.title || 'N/A'}</td>
+            <td>${lead.company_name || 'N/A'}</td>
+            <td>${lead.location || 'N/A'}</td>
+            <td><button class="view-btn" onclick="alert('Email: ${lead.email}')">Show Email</button></td>
+        </tr>
+    `).join('');
 }
 
-// ৪. সার্চ ফাংশন
-document.getElementById('mainSearch').addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase();
-    const filtered = allLeads.filter(l => 
-        l.name.toLowerCase().includes(term) || 
-        l.company.toLowerCase().includes(term)
-    );
-    renderLeads(filtered);
+// টাইপ করার সাথে সাথে সার্চ শুরু হবে
+searchInput.addEventListener('input', (e) => {
+    fetchLeads(e.target.value);
 });
 
-// ৫. ক্রেডিট সিস্টেম
-function handleUnlock(name) {
-    if (currentCredits >= 10) {
-        currentCredits -= 10;
-        document.getElementById('userCredits').innerText = currentCredits;
-        alert(`${name} এর ইমেইল এক্সেস সফল! ১০ ক্রেডিট কাটা হয়েছে।`);
-    } else {
-        alert("আপনার ক্রেডিট শেষ! দয়া করে রিচার্জ করুন।");
-    }
-}
-
+// পেজ লোড হলে শুরুতে সব ডাটা দেখাবে
 fetchLeads();
