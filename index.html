@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apollo AI - Pro Lead Finder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="side-nav">
+            <div class="logo"><i class="fas fa-rocket"></i> Apollo.Clone</div>
+            <ul>
+                <li class="active"><i class="fas fa-search"></i> Search</li>
+                <li><i class="fas fa-bullseye"></i> Leads</li>
+                <li><i class="fas fa-envelope"></i> Sequences</li>
+                <li><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+        </nav>
+
+        <main class="main-area">
+            <header class="header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="mainSearch" placeholder="Search people, companies, keywords...">
+                </div>
+                <div class="user-profile">
+                    <span class="credits">Credits: 1,500</span>
+                    <img src="https://via.placeholder.com/40" alt="Profile">
+                </div>
+            </header>
+
+            <div class="filter-bar">
+                <button class="filter-btn active">Total Results (<span id="count">0</span>)</button>
+                <button class="filter-btn">Verified Emails</button>
+                <button class="filter-btn">With Phone</button>
+            </div>
+
+            <div class="table-container">
+                <table id="leadTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Email Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadData">
+                        </tbody>
+                </table>
+                <div id="loader" class="loader">Loading Leads...</div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
